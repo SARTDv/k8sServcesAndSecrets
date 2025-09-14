@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: treasure-ana
+  name: treasure-diana
   namespace: treasure-hunt
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: treasure-ana
+      app: treasure-diana
   template:
     metadata:
       labels:
-        app: treasure-ana
+        app: treasure-diana
     spec:
       containers:
         - name: web
@@ -20,31 +20,29 @@ spec:
             - containerPort: 80
           env:
             - name: TITLE
-              value: "Treasure Hunt — Fredy"
+              value: "Treasure Hunt — Diana"
             - name: STUDENT
-              value: "Fredy"
+              value: "Diana"
             - name: SALT
               value: "DS3univalle"
             - name: KEY_HASH
-              value: "e03071406de634efb44ae42fb52a19523ac5646281b91de291133e2c37106da0"
+              value: "9d7a07abd01ed340cb7f2465ee1211b96bf5aed1c86265cf3d0d9a25979f1073"
             - name: CLUE
               valueFrom:
                 secretKeyRef:
-                  name: ana-clue
+                  name: diana-clue
                   key: CLUE
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: treasure-ana
+  name: treasure-diana
   namespace: treasure-hunt
 spec:
   selector:
-    app: treasure-ana
+    app: treasure-diana
   ports:
     - name: http
       port: 80
       targetPort: 80
-      # nodePort: 31080   # (opcional) fija uno en el rango 30000–32767
   type: NodePort
-
