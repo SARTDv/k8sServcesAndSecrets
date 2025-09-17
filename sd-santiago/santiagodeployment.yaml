@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: santiruiz/treasure-new:tagname
+          image: santiruiz/treasure-new:latest
           ports:
             - containerPort: 80
           env:
