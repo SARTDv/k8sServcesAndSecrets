@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-elkin
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-elkin
+  template:
+    metadata:
+      labels:
+        app: treasure-elkin
+    spec:
+      containers:
+        - name: web
+          image: elkin2174/treasure-new:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: "Treasure Hunt — elkin"
+            - name: STUDENT
+              value: "elkin"
+            - name: SALT
+              value: "DS3univalle"
+            - name: KEY_HASH
+              value: "37986d1f11d8e99afa44acf720d6b475a26369fa453f626b4513ab20261d0685"
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: elkin-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-elkin
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-elkin
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: NodePort
+
