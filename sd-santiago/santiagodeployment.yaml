@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-santiago
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-santiago
+  template:
+    metadata:
+      labels:
+        app: treasure-santiago
+    spec:
+      containers:
+        - name: web
+          image: santiruiz/treasure-new:tagname
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: "Treasure Hunt — santiago"
+            - name: STUDENT
+              value: "santiago"
+            - name: SALT
+              value: "DS3univalle"
+            - name: KEY_HASH
+              value: "a5a7d704ca667a251ee367c31db776869d30ae07afc95f8bbfce2dc31d1d7303"
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: santiago-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-santiago
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-santiago
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: NodePort
+
