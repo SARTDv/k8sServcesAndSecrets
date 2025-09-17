@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-juandavid
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-juandavid
+  template:
+    metadata:
+      labels:
+        app: treasure-juandavid
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/zimablue7/treasure-new:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: 'Treasure Hunt — Juan David Olaya'
+            - name: STUDENT
+              value: 'Juan David Olaya'
+            - name: SALT
+              value: 'DS3univalle'
+            - name: KEY_HASH
+              value: '428ee44dcec50cf391c394cccb1e298948ee9ec805ed06d6e93bd2c429e99231'
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: juandavid-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-juandavid
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-juandavid
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      # nodePort: 31080   # (opcional) fija uno en el rango 30000–32767
+  type: NodePort
+
+
+# 
