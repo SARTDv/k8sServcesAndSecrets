@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-diana
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-diana
+  template:
+    metadata:
+      labels:
+        app: treasure-diana
+    spec:
+      containers:
+        - name: web
+          image: dianasarmi/treasure-new:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: "Treasure Hunt — Diana Marcela"
+            - name: STUDENT
+              value: "Diana"
+            - name: SALT
+              value: "DS3univalle"
+            - name: KEY_HASH
+              value: "9d7a07abd01ed340cb7f2465ee1211b96bf5aed1c86265cf3d0d9a25979f1073"
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: diana-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-diana
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-diana
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: NodePort
