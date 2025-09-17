@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-bayron
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-bayron
+  template:
+    metadata:
+      labels:
+        app: treasure-bayron
+    spec:
+      containers:
+        - name: web
+          image: bayronj/treasure-new:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: "Treasure Hunt — bayron"
+            - name: STUDENT
+              value: "bayron"
+            - name: SALT
+              value: "DS3univalle"
+            - name: KEY_HASH
+              value: "bece9b122254a516e73e037cb25475699a81ecea1456df52385f6ce37cb56054"
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: bayron-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-bayron
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-bayron
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: NodePort
+
