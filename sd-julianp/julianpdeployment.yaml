@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-julianp
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-julianp
+  template:
+    metadata:
+      labels:
+        app: treasure-julianp
+    spec:
+      containers:
+        - name: web
+          image: palcojulian/treasure-new:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: "Treasure Hunt — julianp"
+            - name: STUDENT
+              value: "julianp"
+            - name: SALT
+              value: "DS3univalle"
+            - name: KEY_HASH
+              value: "c57852a3011dc0845762dfab56617130794f962eb32b20d1f1a1afc9aa8a0e04"
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: julianp-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-julianp
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-julianp
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: NodePort
+
