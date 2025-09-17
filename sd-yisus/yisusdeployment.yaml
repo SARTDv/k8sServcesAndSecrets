@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-yisus
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-yisus
+  template:
+    metadata:
+      labels:
+        app: treasure-yisus
+    spec:
+      containers:
+        - name: web
+          image: jesusdavidlopez/treasure-new:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: "Treasure Hunt — yisus"
+            - name: STUDENT
+              value: "yisus"
+            - name: SALT
+              value: "DS3univalle"
+            - name: KEY_HASH
+              value: "7bb366ab8d18cf24897a4745ddd22e604e95c5b960a9a87af20f2c555f2adc8e"
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: yisus-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-yisus
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-yisus
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      # nodePort: 31080   # (opcional) fija uno en el rango 30000–32767
+  type: NodePort
+
