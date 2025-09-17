@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: camilo27/treasure-new:tagname
+          image: camilo27/treasure-new:latest
           ports:
             - containerPort: 80
           env:
