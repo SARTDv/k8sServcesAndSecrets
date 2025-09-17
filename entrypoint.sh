@@ -1,7 +1,7 @@
-#!/usr/bin/env sh
+#!/bin/sh
 set -eu
 
-# Valores por defecto (seguro dejar todo vacío si no se pasan)
+# Valores por defecto
 : "${TITLE:=Treasure Hunt}"
 : "${STUDENT:=student}"
 : "${SALT:=}"
