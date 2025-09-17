@@ -3,12 +3,11 @@
 set -e
 
 echo "🚀 Iniciando minikube..."
-#minikube start
+minikube start
 
 echo "📂 Creando namespace 'treasure-hunt'..."
 kubectl create namespace treasure-hunt || echo "Namespace ya existe, continuando..."
 
-# Lista de personas (puedes cambiarla según los nombres reales)
 PERSONAS=( "bayron" "alejandro" )
 
 echo "📄 Aplicando secretos y despliegues..."
