@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treasure-camilo
+  namespace: treasure-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: treasure-camilo
+  template:
+    metadata:
+      labels:
+        app: treasure-camilo
+    spec:
+      containers:
+        - name: web
+          image: camilo27/treasure-new:tagname
+          ports:
+            - containerPort: 80
+          env:
+            - name: TITLE
+              value: "Treasure Hunt — camilo"
+            - name: STUDENT
+              value: "camilo"
+            - name: SALT
+              value: "DS3univalle"
+            - name: KEY_HASH
+              value: "faedf91e3f97d8335b93dea2ae0cf62489e7b2ad9d5f26e91644bb351b95931c"
+            - name: CLUE
+              valueFrom:
+                secretKeyRef:
+                  name: camilo-clue
+                  key: CLUE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: treasure-camilo
+  namespace: treasure-hunt
+spec:
+  selector:
+    app: treasure-camilo
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: NodePort
+
